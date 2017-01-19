@@ -43,29 +43,31 @@ while True:
 	(cnts, _) = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 	counter=0
  
+	try:
 	# loop over the contours
-	for c in cnts:
-	        #counter=counter+1
-		# if the contour is too small, ignore it
-		if (cv2.contourArea(c) < 20000):
-			#counter=counter-1
-			continue
-			
-		# compute the bounding box for the contour, draw it on the frame,
-		# and update the text
-		(x, y, w, h) = cv2.boundingRect(c)
-		person=frame[x:x+w+50,y:y+h+50]
-		cv2.imshow("person",person)
-		gray = cv2.cvtColor(person, cv2.COLOR_BGR2GRAY)
-    		faces = face_cascade.detectMultiScale(gray, 2.5, 5)
-    		for (x1,y1,w1,h1) in faces:
-        		cv2.rectangle(person,(x1-25,y1-110),(x1+w1+50,y1+h1+25),(255,0,0),2)
-        		counter=counter+1
-		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-	counter=counter+ord('0')
-	font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(frame,'no of people '+chr(counter),(0,130), font, 1, (200,255,155), 2)	
-
+		for c in cnts:
+	        	#counter=counter+1
+			# if the contour is too small, ignore it
+			if (cv2.contourArea(c) < 20000):
+				#counter=counter-1
+				continue
+				
+			# compute the bounding box for the contour, draw it on the frame,
+			# and update the text
+			(x, y, w, h) = cv2.boundingRect(c)
+			person=frame[x:x+w+50,y:y+h+50]
+			cv2.imshow("person",person)
+			gray = cv2.cvtColor(person, cv2.COLOR_BGR2GRAY)
+    			faces = face_cascade.detectMultiScale(gray, 2.5, 5)
+    			for (x1,y1,w1,h1) in faces:
+        			cv2.rectangle(person,(x1-25,y1-110),(x1+w1+50,y1+h1+25),(255,0,0),2)
+        			counter=counter+1
+			cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+		counter=counter+ord('0')
+		font = cv2.FONT_HERSHEY_SIMPLEX
+        	cv2.putText(frame,'no of people '+chr(counter),(0,130), font, 1, (200,255,155), 2)	
+	except (RuntimeError, TypeError, NameError):
+		pass
 #show frame
         cv2.imshow('original',frame)
  

@@ -31,7 +31,7 @@ while True:
         frameDelta=mask3     
         	# compute the absolute difference between the current frame and
 	# first frame
-	thresh = cv2.threshold(frameDelta, 15, 255, cv2.THRESH_BINARY)[1]
+	thresh = cv2.threshold(frameDelta, 18, 255, cv2.THRESH_BINARY)[1]
 	#thresh = cv2.adaptiveThreshold(frameDelta, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115, 1)
 	thresh=cv2.dilate(thresh,kernal,iterations=2)
 	cv2.imshow('Adaptive threshold',thresh)
@@ -55,19 +55,24 @@ while True:
 			# compute the bounding box for the contour, draw it on the frame,
 			# and update the text
 			(x, y, w, h) = cv2.boundingRect(c)
-			person=frame[x:x+w+50,y:y+h+50]
+			#print(x)
+			person=frame[y:y+h,x:x+w]
+			k=cv2.rectangle(frame, (x, y), (x + w, y + h), (244, 255, 0), 1)
+			#print(k)
 			cv2.imshow("person",person)
 			gray = cv2.cvtColor(person, cv2.COLOR_BGR2GRAY)
-    			faces = face_cascade.detectMultiScale(gray, 2.5, 5)
+    			faces = face_cascade.detectMultiScale(gray, 1.1, 70)
     			for (x1,y1,w1,h1) in faces:
         			cv2.rectangle(person,(x1-25,y1-110),(x1+w1+50,y1+h1+25),(255,0,0),2)
         			counter=counter+1
-			cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+			#cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 		counter=counter+ord('0')
 		font = cv2.FONT_HERSHEY_SIMPLEX
-        	cv2.putText(frame,'no of people '+chr(counter),(0,130), font, 1, (200,255,155), 2)	
-	except (RuntimeError, TypeError, NameError):
+        	cv2.putText(frame,'no of people '+chr(counter),(0,130), font, 1, (200,255,155), 2)
+	except (Exception,RuntimeError, TypeError, NameError):
 		pass
+	
+		
 #show frame
         cv2.imshow('original',frame)
  
